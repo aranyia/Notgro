@@ -1,4 +1,4 @@
 package org.aranyia.notgro.model.user;
 
-public interface Affiliate {
+public class Affiliate extends User {
 }

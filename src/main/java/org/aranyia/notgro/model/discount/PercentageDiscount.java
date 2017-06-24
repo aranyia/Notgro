@@ -7,6 +7,9 @@ public class PercentageDiscount<T extends Item> implements Discount<T> {
     private final double discountRate;
 
     public PercentageDiscount(double discountRate) {
+        if (discountRate < 0 || discountRate > 1) {
+            throw new IllegalArgumentException("rate value must be between 0 and 1 inclusive");
+        }
         this.discountRate = discountRate;
     }
 

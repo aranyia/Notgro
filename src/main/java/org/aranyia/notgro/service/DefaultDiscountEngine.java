@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class DefaultDiscountEngine {
+public class DefaultDiscountEngine implements DiscountEngine {
 
     private final Collection<Predicate<Item>> discountFilters;
 
@@ -17,7 +17,8 @@ public class DefaultDiscountEngine {
         this.discountFilters = discountFilters;
     }
 
-    public Bill validateDiscounts(Bill bill, PercentageDiscount percentageDiscount, ValueDiscount valueDiscount) {
+    @Override
+    public Bill applyDiscounts(Bill bill, PercentageDiscount percentageDiscount, ValueDiscount valueDiscount) {
         final List<Item> items = bill.getItems();
 
         final Predicate<Item> discountFilterCondition = discountFilters.stream()

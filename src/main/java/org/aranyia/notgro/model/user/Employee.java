@@ -1,4 +1,4 @@
 package org.aranyia.notgro.model.user;
 
-public interface Employee {
+public class Employee extends User {
 }

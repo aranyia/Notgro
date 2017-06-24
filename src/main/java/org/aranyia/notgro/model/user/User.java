@@ -4,23 +4,20 @@ import java.time.LocalDate;
 
 public class User {
 
-    private LocalDate customerSince;
+    private LocalDate registrationDate;
 
-    private double discountRate;
-
-    private User() {
+    public User() {
     }
 
-    public User(final LocalDate customerSince, final double applicableDiscount) {
-        this.customerSince = customerSince;
-        this.discountRate = applicableDiscount;
+    public User(final LocalDate registrationDate) {
+        this.registrationDate = registrationDate;
     }
 
-    public LocalDate getCustomerSince() {
-        return customerSince;
+    public LocalDate getRegistrationDate() {
+        return registrationDate;
     }
 
-    public double getDiscountRate() {
-        return discountRate;
+    public void setRegistrationDate(LocalDate registrationDate) {
+        this.registrationDate = registrationDate;
     }
 }
