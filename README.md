@@ -1,7 +1,7 @@
 # Notgro
 
 ## Overview
-Notgro is a retail website, the following discounts apply:
+Notgro is a retail website where the following discounts apply:
 
 1. If the user is an employee of the store, he gets a 30% discount
 2. If the user is an affiliate of the store, he gets a 10% discount
@@ -28,6 +28,9 @@ And you can install it into your Maven repository:
 ```
 mvn install
 ```
+
+## Test coverage report
+During packaging or installation, Maven runs JUnit tests under code coverage and creates a coverage report with [JaCoCo](www.eclemma.org/jacoco). The generated report can be found in the site folder: _target/site/jacoco/index.html_
 
 ## Licence
 Licensed under the Apache License, Version 2.0 (the "License");
