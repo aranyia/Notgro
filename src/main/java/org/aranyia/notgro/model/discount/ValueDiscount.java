@@ -7,6 +7,9 @@ public class ValueDiscount implements Discount<Double> {
     private final double valueStepDiscount;
 
     public ValueDiscount(double valueStep, double valueStepDiscount) {
+        if (valueStep <= 0 || valueStepDiscount < 0) {
+            throw new IllegalArgumentException("positive parameters expected");
+        }
         this.valueStep = valueStep;
         this.valueStepDiscount = valueStepDiscount;
     }
