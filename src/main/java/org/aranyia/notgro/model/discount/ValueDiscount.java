@@ -20,4 +20,12 @@ public class ValueDiscount implements Discount<Double> {
 
         return value - sumDiscount;
     }
+
+    public double getValueStep() {
+        return valueStep;
+    }
+
+    public double getValueStepDiscount() {
+        return valueStepDiscount;
+    }
 }

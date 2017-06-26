@@ -28,6 +28,22 @@ public class ValueDiscountTest {
         assertThat(discountedItemPrice, equalTo(valueDiscounted));
     }
 
+    @Test
+    public void testValueGetters() {
+        //given
+        final double valueStep = 100;
+        final double valueStepDiscount = 5;
+        valueDiscount = new ValueDiscount(valueStep, valueStepDiscount);
+
+        //when
+        final double actualValueStep = valueDiscount.getValueStep();
+        final double actualValueStepDiscount = valueDiscount.getValueStepDiscount();
+
+        //then
+        assertThat(actualValueStep, equalTo(valueStep));
+        assertThat(actualValueStepDiscount, equalTo(valueStepDiscount));
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void testWithInvalidValueStep() {
         valueDiscount = new ValueDiscount(-5,5);
