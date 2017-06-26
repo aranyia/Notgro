@@ -12,7 +12,8 @@ import org.aranyia.notgro.predicates.DiscountFilter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -22,12 +23,22 @@ import java.util.function.Predicate;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 
-@RunWith(JUnit4.class)
+@RunWith(MockitoJUnitRunner.class)
 public class DiscountEngineTest {
+
+    private static final double DISCOUNT_RATE_AFFILIATE = 0.1;
+    private static final double DISCOUNT_RATE_DEFAULT = 0.0;
+    private static final double DISCOUNT_RATE_EMPLOYEE = 0.3;
+    private static final double DISCOUNT_RATE_LOYAL_CUSTOMER = 0.05;
+    private static final double DISCOUNT_VALUE = 5.0;
+    private static final double DISCOUNT_VALUE_STEP = 100.0;
+    private static final int LOYAL_CUSTOMER_REG_DAYS = 2 * 365;
 
     private DiscountEngine discountEngine;
 
+    @Mock
     private UserDiscountValidator userDiscountValidator;
 
     private Bill bill;
@@ -36,15 +47,6 @@ public class DiscountEngineTest {
     public void init() {
         final List<Predicate<Item>> discountFilters = Arrays.asList(DiscountFilter.fromAsNegated(GroceryItem.class));
         discountEngine = new DefaultDiscountEngine(discountFilters);
-
-        userDiscountValidator = DefaultUserDiscountValidator.newBuilder()
-                .withAffiliateDiscountRate(0.1)
-                .withEmployeeDiscountRate(0.3)
-                .withLoyalCustomerDiscountRate(0.05)
-                .withLoyalCustomerRegistrationDays(2 * 365)
-                .withValueDiscountStep(100.0)
-                .withValueDiscount(5.0)
-                .build();
 
         final List<Item> items =
                 Arrays.asList(new Item(100), new Item(80), new Item(30), new GroceryItem(5.0));
@@ -58,7 +60,10 @@ public class DiscountEngineTest {
         user.setRegistrationDate(LocalDate.now().minusYears(3));
 
         //when
-        userDiscountValidator.getPercentageDiscount(user);
+        when(userDiscountValidator.getPercentageDiscount(user))
+                .thenReturn(new PercentageDiscount(DISCOUNT_RATE_AFFILIATE));
+        when(userDiscountValidator.getValueDiscount(user))
+                .thenReturn(new ValueDiscount(DISCOUNT_VALUE_STEP, DISCOUNT_VALUE));
 
         final PercentageDiscount percentageDiscount = userDiscountValidator.getPercentageDiscount(user);
         final ValueDiscount valueDiscount = userDiscountValidator.getValueDiscount(user);
@@ -77,7 +82,10 @@ public class DiscountEngineTest {
         user.setRegistrationDate(LocalDate.now().minusYears(1));
 
         //when
-        userDiscountValidator.getPercentageDiscount(user);
+        when(userDiscountValidator.getPercentageDiscount(user))
+                .thenReturn(new PercentageDiscount(DISCOUNT_RATE_EMPLOYEE));
+        when(userDiscountValidator.getValueDiscount(user))
+                .thenReturn(new ValueDiscount(DISCOUNT_VALUE_STEP, DISCOUNT_VALUE));
 
         final PercentageDiscount percentageDiscount = userDiscountValidator.getPercentageDiscount(user);
         final ValueDiscount valueDiscount = userDiscountValidator.getValueDiscount(user);
@@ -93,10 +101,13 @@ public class DiscountEngineTest {
     public void testDiscountsForLoyalCustomer() {
         //given
         final User user = new User();
-        user.setRegistrationDate(LocalDate.now().minusDays(2 * 365 + 10));
+        user.setRegistrationDate(LocalDate.now().minusDays(LOYAL_CUSTOMER_REG_DAYS + 10));
 
         //when
-        userDiscountValidator.getPercentageDiscount(user);
+        when(userDiscountValidator.getPercentageDiscount(user))
+                .thenReturn(new PercentageDiscount(DISCOUNT_RATE_LOYAL_CUSTOMER));
+        when(userDiscountValidator.getValueDiscount(user))
+                .thenReturn(new ValueDiscount(DISCOUNT_VALUE_STEP, DISCOUNT_VALUE));
 
         final PercentageDiscount percentageDiscount = userDiscountValidator.getPercentageDiscount(user);
         final ValueDiscount valueDiscount = userDiscountValidator.getValueDiscount(user);
@@ -115,7 +126,10 @@ public class DiscountEngineTest {
         user.setRegistrationDate(LocalDate.now().minusDays(10));
 
         //when
-        userDiscountValidator.getPercentageDiscount(user);
+        when(userDiscountValidator.getPercentageDiscount(user))
+                .thenReturn(new PercentageDiscount(DISCOUNT_RATE_DEFAULT));
+        when(userDiscountValidator.getValueDiscount(user))
+                .thenReturn(new ValueDiscount(DISCOUNT_VALUE_STEP, DISCOUNT_VALUE));
 
         final PercentageDiscount percentageDiscount = userDiscountValidator.getPercentageDiscount(user);
         final ValueDiscount valueDiscount = userDiscountValidator.getValueDiscount(user);
