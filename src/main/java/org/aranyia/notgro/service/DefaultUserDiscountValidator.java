@@ -56,11 +56,12 @@ public class DefaultUserDiscountValidator implements UserDiscountValidator {
 
     public static Builder newBuilder(DefaultUserDiscountValidator copy) {
         final Builder builder = new Builder();
-        builder.valueDiscountStep = copy.valueDiscountStep;
-        builder.valueDiscount = copy.valueDiscount;
         builder.employeeDiscountRate = copy.employeeDiscountRate;
         builder.affiliateDiscountRate = copy.affiliateDiscountRate;
         builder.loyalCustomerDiscountRate = copy.loyalCustomerDiscountRate;
+        builder.loyalCustomerRegistrationDays = copy.loyalCustomerRegistrationDays;
+        builder.valueDiscount = copy.valueDiscount;
+        builder.valueDiscountStep = copy.valueDiscountStep;
         return builder;
     }
 
