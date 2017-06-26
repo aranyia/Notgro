@@ -65,7 +65,7 @@ public class DefaultUserDiscountValidator implements UserDiscountValidator {
         if (user == null || user.getRegistrationDate() == null) {
             return false;
         } else {
-            return LocalDate.now().minusYears(2).isBefore(user.getRegistrationDate());
+            return user.getRegistrationDate().isBefore(LocalDate.now().minusYears(2));
         }
     }
 
