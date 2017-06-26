@@ -16,6 +16,8 @@ public class DefaultUserDiscountValidator implements UserDiscountValidator {
 
     private final double loyalCustomerDiscountRate;
 
+    private final int loyalCustomerRegistrationDays;
+
     private final double valueDiscount;
 
     private final double valueDiscountStep;
@@ -24,6 +26,7 @@ public class DefaultUserDiscountValidator implements UserDiscountValidator {
         this.employeeDiscountRate = builder.employeeDiscountRate;
         this.affiliateDiscountRate = builder.affiliateDiscountRate;
         this.loyalCustomerDiscountRate = builder.loyalCustomerDiscountRate;
+        this.loyalCustomerRegistrationDays = builder.loyalCustomerRegistrationDays;
         this.valueDiscount = builder.valueDiscount;
         this.valueDiscountStep = builder.valueDiscountStep;
     }
@@ -65,7 +68,7 @@ public class DefaultUserDiscountValidator implements UserDiscountValidator {
         if (user == null || user.getRegistrationDate() == null) {
             return false;
         } else {
-            return user.getRegistrationDate().isBefore(LocalDate.now().minusYears(2));
+            return user.getRegistrationDate().isBefore(LocalDate.now().minusDays(loyalCustomerRegistrationDays));
         }
     }
 
@@ -76,6 +79,7 @@ public class DefaultUserDiscountValidator implements UserDiscountValidator {
         private double loyalCustomerDiscountRate;
         private double valueDiscount;
         private double valueDiscountStep;
+        private int loyalCustomerRegistrationDays;
 
         private Builder() {
         }
@@ -102,6 +106,11 @@ public class DefaultUserDiscountValidator implements UserDiscountValidator {
 
         public Builder withLoyalCustomerDiscountRate(double val) {
             loyalCustomerDiscountRate = val;
+            return this;
+        }
+
+        public Builder withLoyalCustomerRegistrationDays(int val) {
+            loyalCustomerRegistrationDays = val;
             return this;
         }
 

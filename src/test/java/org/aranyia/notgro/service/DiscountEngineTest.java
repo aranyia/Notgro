@@ -1,10 +1,10 @@
 package org.aranyia.notgro.service;
 
+import org.aranyia.notgro.model.Bill;
 import org.aranyia.notgro.model.discount.PercentageDiscount;
 import org.aranyia.notgro.model.discount.ValueDiscount;
 import org.aranyia.notgro.model.item.GroceryItem;
 import org.aranyia.notgro.model.item.Item;
-import org.aranyia.notgro.model.Bill;
 import org.aranyia.notgro.model.user.Affiliate;
 import org.aranyia.notgro.model.user.Employee;
 import org.aranyia.notgro.model.user.User;
@@ -41,6 +41,7 @@ public class DiscountEngineTest {
                 .withAffiliateDiscountRate(0.1)
                 .withEmployeeDiscountRate(0.3)
                 .withLoyalCustomerDiscountRate(0.05)
+                .withLoyalCustomerRegistrationDays(2 * 365)
                 .withValueDiscountStep(100.0)
                 .withValueDiscount(5.0)
                 .build();
@@ -54,7 +55,7 @@ public class DiscountEngineTest {
     public void testDiscountsForAffiliate() {
         //given
         final Affiliate user = new Affiliate();
-        user.setRegistrationDate(LocalDate.now().minusYears(2).minusDays(10));
+        user.setRegistrationDate(LocalDate.now().minusYears(3));
 
         //when
         userDiscountValidator.getPercentageDiscount(user);
@@ -73,7 +74,7 @@ public class DiscountEngineTest {
     public void testDiscountsForEmployee() {
         //given
         final Employee user = new Employee();
-        user.setRegistrationDate(LocalDate.now().minusYears(2).minusDays(10));
+        user.setRegistrationDate(LocalDate.now().minusYears(1));
 
         //when
         userDiscountValidator.getPercentageDiscount(user);
@@ -92,7 +93,7 @@ public class DiscountEngineTest {
     public void testDiscountsForLoyalCustomer() {
         //given
         final User user = new User();
-        user.setRegistrationDate(LocalDate.now().minusYears(2).minusDays(10));
+        user.setRegistrationDate(LocalDate.now().minusDays(2 * 365 + 10));
 
         //when
         userDiscountValidator.getPercentageDiscount(user);
